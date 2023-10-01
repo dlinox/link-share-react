@@ -169,4 +169,73 @@ const changePassword = async ({ oldPass, newPass }) => {
   }
 };
 
-export { singIn, singUp, singOut, currentUser, updateAvatar, changePassword };
+const recoverPassword = async({email}) => {
+  try {
+    let body = JSON.stringify({
+      email,
+    });
+
+    let res = await fetch(`${BASE_URL}/password/recover`, {
+      method: "POST",
+      body: body,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    let jsonResponse = await res.json();
+
+    return jsonResponse;
+  } catch (error) {
+    return {
+      status: "error",
+      message: "Unknown error: " +error ,
+      data: null,
+    };
+  }
+}
+
+const resetPassword = async ({ code, email, password }) => {
+  try {
+    let data = JSON.stringify({
+      email: email,
+      password: password,
+      code: code,
+    });
+
+    let res = await fetch(`${BASE_URL}/password/recover`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: data,
+    });
+
+    let jsonResponse = await res.json();
+
+    console.log(jsonResponse);
+
+    if (jsonResponse.status === "error") {
+      return {
+        status: jsonResponse.status,
+        message: jsonResponse.message,
+        data: null,
+      };
+    }
+
+    return {
+      status: jsonResponse.status,
+      message: "Recover Successful",
+      data: jsonResponse.data.user,
+    };
+  } catch (error) {
+    return {
+      status: "error",
+      message: error,
+      data: null,
+    };
+  }
+};
+
+
+export { singIn, singUp, singOut, currentUser, updateAvatar, changePassword , recoverPassword, resetPassword};

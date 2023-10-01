@@ -133,4 +133,38 @@ const deleteLink = async (linkId) => {
   }
 };
 
-export { register, list, votes, deleteLink };
+const searchLinks =  async ({keyword}) => {
+  
+  try {
+    let token = localStorage.getItem("token");
+
+    let res = await fetch(`${BASE_URL}?keyword=${keyword}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+
+    let jsonResponse = await res.json();
+
+    if (jsonResponse.status === "error") {
+      return jsonResponse;
+    }
+
+    console.log(jsonResponse);
+
+    return  jsonResponse;
+
+  } catch (error) {
+    return {
+      status: "error",
+      message: error,
+      data: null,
+    };
+  }
+
+
+}
+
+export { register, list, votes, deleteLink, searchLinks };

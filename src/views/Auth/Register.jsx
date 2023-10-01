@@ -15,7 +15,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const { setIsLoggedIn, isLoggedIn, setUser } = useAppContext();
+  const { setIsLoggedIn, isLoggedIn, setUser, setAlert } = useAppContext();
 
   useEffect(() => {
     if (isLoggedIn) navigate("/user", { replace: true });
@@ -41,6 +41,11 @@ function Login() {
       console.log(res);
       setUser(res.data);
       setIsLoggedIn(true);
+    }
+
+    else{
+      setAlert({ show: true, type: "error", message: res.message });
+      
     }
   };
 

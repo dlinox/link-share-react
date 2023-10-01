@@ -10,7 +10,7 @@ function FormRegisterLink({ onSubmit }) {
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
 
-  const { links, setLinks, user } = useAppContext();
+  const { links, setLinks, user, setAlert } = useAppContext();
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -33,14 +33,18 @@ function FormRegisterLink({ onSubmit }) {
         owner: true,
         votedByMe: false,
         votes: 0,
-        username: user.username
+        username: user.username,
       };
       // Modificar el array original agregando el nuevo elemento al principio
       links.unshift(newLink);
 
       // Actualizar el estado con el array modificado
-      setLinks([...links]); 
+      setLinks([...links]);
+
+      setAlert({ show: true, type: "success", message: "Registro exitoso" });
       onSubmit();
+    } else {
+      setAlert({ show: true, type: "error", message: res.message });
     }
   };
 

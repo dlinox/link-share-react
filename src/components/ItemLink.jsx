@@ -7,42 +7,55 @@ import StarRating from "./Stars";
 import { useAppContext } from "../context/AppContext";
 
 const ItemLink = ({ item }) => {
-  const { links, setLinks } = useAppContext();
+  const { links, setLinks, setAlert } = useAppContext();
+
   const handleRatingChange = async (newRating) => {
     let res = await votes({
       linkId: item.id,
       value: parseInt(newRating),
     });
-    console.log(res);
 
-    item.votedByMe = true;
+    if (res.status === "ok") {
+      setAlert({ show: true, message: "Gracias por su voto", type: "info" });
+      links.map((link) => {
+        if (link.id === item.id) {
+          link.votedByMe = true;
+        }
+        return link;
+      });
 
-    return res.data.votesAvg;
+      setLinks([...links]);
+    } else {
+      setAlert({ show: true, message: res.message, type: "error" });
+    }
+    return res;
   };
 
   const handledelete = async () => {
     let res = await deleteLink(item.id);
-
     if (res.status === "ok") {
       let resfilter = links.filter((link) => link.id !== item.id);
+      setAlert({ show: true, message: "Link eliminado", type: "success" });
       setLinks([...resfilter]);
+    } else {
+      setAlert({ show: true, message: res.message, type: "error" });
     }
-    console.log(res);
   };
 
   return (
+    
     <div className="bg-white border rounded-lg shadow-sm p-4 mb-4">
       {/* Encabezado de la tarjeta */}
       <div className="flex items-center">
         <div className="w-10 h-10 bg-gray-400 rounded-full"></div>
         <div className="ml-3">
-          <div className="text-gray-800 font-semibold">{item.title}</div>
+          <a  href={item.url} target="_blank" className="text-gray-800 font-semibold">{item.title}</a>
           <div className="text-gray-500">@{item.username}</div>
         </div>
       </div>
 
       {/* Contenido de la tarjeta */}
-      <div className="mt-4 text-gray-800">{item.url}</div>
+      <div className="mt-4 text-gray-800">{item.description}</div>
 
       {/* Pie de la tarjeta */}
       <div className="flex items-center justify-between mt-2">
@@ -79,9 +92,7 @@ const ItemLink = ({ item }) => {
             isDisabled={item.votedByMe}
             initialRating={item.votes}
             maxRating={5}
-            onRatingChange={
-              item.votedByMe || item.owner ? null : handleRatingChange
-            }
+            onRatingChange={handleRatingChange}
           />
         </div>
       </div>

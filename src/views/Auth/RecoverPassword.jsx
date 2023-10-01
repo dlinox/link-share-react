@@ -3,18 +3,17 @@ import TextInput from "../../components/TextInput";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 
-import { singIn } from "../../services/AuthService";
+import { recoverPassword } from "../../services/AuthService";
 
 import { useAppContext } from "../../context/AppContext";
 
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function RecoverPassword() {
   const navigate = useNavigate();
-  const { setIsLoggedIn, isLoggedIn, setUser, setAlert } = useAppContext();
+  const { isLoggedIn, setAlert } = useAppContext();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -24,17 +23,12 @@ function Login() {
     if (isLoggedIn) navigate("/user", { replace: true });
   }, [isLoggedIn, navigate]);
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let res = await singIn({ email, password });
-
+    let res = await recoverPassword({ email });
     if (res.status === "ok") {
-      setUser(res.data);
-      setIsLoggedIn(true);
+      navigate("/password-reset", { replace: true });
+      setAlert({ show: true, type: "success", message: res.message });
     } else {
       setAlert({ show: true, type: "error", message: res.message });
     }
@@ -45,7 +39,7 @@ function Login() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Inicia sesión en tu cuenta
+            Restablecer contraseña
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -59,51 +53,23 @@ function Login() {
               onChange={handleEmailChange}
               placeholder="Ingresa tu correo electrónico"
             />
-
-            <TextInput
-              id="login-password"
-              name="login-password"
-              label="Contraseña"
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-              placeholder="Contraseña"
-            />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-end">
             <div className="text-sm">
               <Link
-                to="/password-recover"
+                to="/"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Olvide mi contraseña
-              </Link>
-            </div>
-
-            <div className="text-sm">
-              <Link
-                to="/register"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Aun no tengo una cuenta
+                Ingresar
               </Link>
             </div>
           </div>
 
           <div>
             <Button color={"indigo"} type="submit">
-              Iniciar sesión
+              Enviar correo
             </Button>
-          </div>
-
-          <div className=" mt-4 text-sm w-full text-center">
-            <Link
-              to="/password-reset"
-              className="font-medium text-black underline hover:text-indigo-500 "
-            >
-              Tengo un codigo de recuperacion
-            </Link>
           </div>
         </form>
       </div>
@@ -111,4 +77,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default RecoverPassword;

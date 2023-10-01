@@ -9,7 +9,7 @@ function FormAvatarUpload({ onSubmit }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
 
-  const { user, setUser } = useAppContext();
+  const { user, setUser, setAlert } = useAppContext();
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -28,12 +28,15 @@ function FormAvatarUpload({ onSubmit }) {
     let res = await updateAvatar({ avatar: avatarFile });
     console.log(res);
     if (res.status === "ok") {
-      onSubmit(res);
-
       setUser({
         ...user,
         avatar: res.data,
       });
+      onSubmit();
+
+      setAlert({ show: true, message: "Avatar Actualizado", type: "success" });
+    } else {
+      setAlert({ show: true, message: res.message, type: "error" });
     }
   };
 

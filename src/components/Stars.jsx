@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 
-const StarRating = ({
-  initialRating,
-  maxRating,
-  onRatingChange,
-  isDisabled
-}) => {
+const StarRating = ({ initialRating, maxRating, onRatingChange }) => {
   const [rating, setRating] = useState(initialRating);
 
-  const handleClick =async (newRating) => {
-    // setRating(newRating);
+  const handleClick = async (newRating) => {
+
     if (onRatingChange) {
       let res = await onRatingChange(newRating);
-      console.log('-->', res);
+      if(res.status === 'ok'){
+        setRating(res.data.votesAvg);
+      }
 
-      setRating(res);
     }
   };
 
@@ -27,7 +23,7 @@ const StarRating = ({
         className={`cursor-pointer text-2xl self-center hover:text-yellow-300 ${starClassName}`}
         onClick={() => handleClick(i)}
       >
-        &#9733; 
+        &#9733;
       </span>
     );
   }

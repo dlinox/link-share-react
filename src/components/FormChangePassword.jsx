@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import TextInput from "./TextInput";
 import Button from "./Button";
 import { changePassword } from "../services/AuthService";
+import { useAppContext } from "../context/AppContext";
 
 function FormChangePassword({ onSubmit }) {
+
+  const {setAlert} =  useAppContext();
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
 
@@ -18,8 +21,16 @@ function FormChangePassword({ onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let res = await changePassword({ oldPass, newPass });
-    onSubmit(res);
-    console.log(res);
+
+    if(res.status === 'ok'){
+      setAlert({ show: true, message: "Contraseña Actualizada", type: "success" });
+    
+      onSubmit(res);
+    }
+    else{
+      setAlert({ show: true, message: res.message , type: "error" });
+
+    }
   };
 
   return (

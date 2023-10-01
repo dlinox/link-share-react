@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { currentUser, singOut } from "../services/AuthService";
+import Alert from "../components/Alert";
 
 const AppContext = createContext();
 
@@ -16,6 +17,7 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [links, setLinks] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -52,9 +54,13 @@ export const AppProvider = ({ children }) => {
         setLinks,
         isLoggedIn,
         setIsLoggedIn,
+        alert,
+        setAlert
       }}
     >
       {children}
+
+      <Alert/>
     </AppContext.Provider>
   );
 };
