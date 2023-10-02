@@ -52,7 +52,7 @@ function ResetPassword() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Reestablecer contraseña
+            Restablecer contraseña
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -70,7 +70,7 @@ function ResetPassword() {
             <TextInput
               id="reset-password"
               name="reset-password"
-              label="Contraseña"
+              label="Nueva contraseña"
               type="password"
               value={password}
               onChange={handlePasswordChange}
@@ -80,7 +80,7 @@ function ResetPassword() {
             <TextInput
               id="reset-code"
               name="reset-code"
-              label="Codigo de recuperacion"
+              label="Código de recuperación"
               type="password"
               value={code}
               onChange={handleCodeChange}
