@@ -74,7 +74,7 @@ function ResetPassword() {
               type="password"
               value={password}
               onChange={handlePasswordChange}
-              placeholder="Contraseña"
+              placeholder="Nueva contraseña"
             />
 
             <TextInput
