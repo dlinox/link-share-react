@@ -43,9 +43,11 @@ function FormChangePassword({ onSubmit }) {
           name="update-oldPass"
           onChange={handleOldPassChange}
           placeholder="Contraseña actual"
+          type="password"
         />
 
         <TextInput
+        type="password"
           label="Contraseña nueva"
           value={newPass}
           id="update-newPass"

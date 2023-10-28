@@ -10,17 +10,13 @@ import FormChangePassword from "../../components/FormChangePassword";
 import FormRegisterLink from "../../components/FormRegisterLink";
 import ItemLink from "../../components/ItemLink";
 
-
-
 function Home() {
-
-  const BASE_URL = process.env.REACT_APP_API_URL ;
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user, setLinks, links } = useAppContext();
 
   const [search, setSearch] = useState("");
 
   const handleSearchChange = async (e) => {
-
     const inputValue = e.target.value;
     setSearch(inputValue);
 
@@ -37,14 +33,11 @@ function Home() {
       console.log(res);
       setLinks(res.data.links);
     }
-
   };
 
   const modalRef = useRef();
   const modalAvatarRef = useRef();
   const modalPasswordRef = useRef();
-
-
 
   const onSuccess = () => {
     modalRef.current.closeModal();
@@ -59,6 +52,29 @@ function Home() {
     };
     getLinks();
   }, []);
+
+  const [url, setUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [title, setTitle] = useState("");
+
+  const handleUrlChange = (e) => {
+    setUrl(e.target.value);
+  };
+
+  const fetchLinkPreview = async () => {
+    try {
+      // Realiza una solicitud a un servicio de extracción de datos o realiza el análisis del enlace aquí.
+      // Asumiremos que ya tienes el título y la URL de la imagen disponibles.
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Actualiza el estado con la información de la previsualización.
+      setTitle(data.title);
+      setImageUrl(data.image);
+    } catch (error) {
+      console.error("Error al obtener la vista previa:", error);
+    }
+  };
 
   return (
     <>
@@ -138,6 +154,23 @@ function Home() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div>
+        <input
+          type="text"
+          placeholder="URL del enlace"
+          value={url}
+          onChange={handleUrlChange}
+        />
+        <button onClick={fetchLinkPreview}>Obtener vista previa</button>
+
+        {imageUrl && (
+          <div className="link-preview">
+            <img src={imageUrl} alt={title} />
+            <p>{title}</p>
+          </div>
+        )}
       </div>
     </>
   );
