@@ -5,8 +5,7 @@ import { changePassword } from "../services/AuthService";
 import { useAppContext } from "../context/AppContext";
 
 function FormChangePassword({ onSubmit }) {
-
-  const {setAlert} =  useAppContext();
+  const { setAlert } = useAppContext();
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
 
@@ -22,14 +21,16 @@ function FormChangePassword({ onSubmit }) {
     e.preventDefault();
     let res = await changePassword({ oldPass, newPass });
 
-    if(res.status === 'ok'){
-      setAlert({ show: true, message: "Contraseña Actualizada", type: "success" });
-    
-      onSubmit(res);
-    }
-    else{
-      setAlert({ show: true, message: res.message , type: "error" });
+    if (res.status === "ok") {
+      setAlert({
+        show: true,
+        message: "Contraseña Actualizada",
+        type: "success",
+      });
 
+      onSubmit(res);
+    } else {
+      setAlert({ show: true, message: res.message, type: "error" });
     }
   };
 
@@ -47,7 +48,7 @@ function FormChangePassword({ onSubmit }) {
         />
 
         <TextInput
-        type="password"
+          type="password"
           label="Contraseña nueva"
           value={newPass}
           id="update-newPass"
@@ -55,6 +56,8 @@ function FormChangePassword({ onSubmit }) {
           onChange={handleNewPassChange}
           placeholder="Contraseña nueva"
         />
+
+        
       </div>
       <div>
         <Button type="submit">Guardar</Button>
