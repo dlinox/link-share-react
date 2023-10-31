@@ -19,15 +19,17 @@ function Home() {
   const [searchByDay, setsearchByDay] = useState("");
   const [searchByUsername, setsearchByUsername] = useState("");
 
-  const filterListLinks = async () => {
+  const filterListLinks = async ({
+    _search,
+    _searchByDay,
+    _searchByUsername,
+  }) => {
     console.log("Buscando...");
-    let res;
-
     // Si se ha ingresado una búsqueda, realiza la búsqueda
-    res = await searchLinks({
-      keyword: search,
-      day: searchByDay,
-      username: searchByUsername,
+    let res = await searchLinks({
+      keyword: _search,
+      day: _searchByDay,
+      username: _searchByUsername,
     });
 
     console.log(res);
@@ -39,21 +41,34 @@ function Home() {
     setSearch(inputValue);
 
     if (inputValue.length >= 3 || inputValue === "") {
-      await filterListLinks();
+      await filterListLinks({
+        _search: inputValue,
+        _searchByDay: searchByDay,
+        _searchByUsername: searchByUsername,
+      });
     }
   };
 
   const handleSearchByDayChange = async (e) => {
     const inputValue = e.target.value;
     setsearchByDay(inputValue);
-    await filterListLinks();
+    await filterListLinks({
+      _search: search,
+      _searchByDay: inputValue,
+      _searchByUsername: searchByUsername,
+    });
   };
 
   const handleSearchByUsernameChange = async (e) => {
     const inputValue = e.target.value;
     setsearchByUsername(inputValue);
+
     if (inputValue.length >= 2 || inputValue === "") {
-      await filterListLinks();
+      await filterListLinks({
+        _search: search,
+        _searchByDay: searchByDay,
+        _searchByUsername: inputValue,
+      });
     }
   };
 
